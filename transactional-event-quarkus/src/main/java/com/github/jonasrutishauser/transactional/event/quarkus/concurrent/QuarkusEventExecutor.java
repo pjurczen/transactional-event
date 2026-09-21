@@ -43,7 +43,7 @@ class QuarkusEventExecutor implements EventExecutor {
 
     @Override
     public void execute(Runnable command) {
-        executor.execute(executorThreadContext.contextualRunnable(command));
+        executor.execute(new ContextIsolatingRunnable(executorThreadContext.contextualRunnable(command)));
     }
 
     @Override

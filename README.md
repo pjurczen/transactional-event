@@ -61,6 +61,10 @@ class SomeBean {
 }
 ```
 
+### Quarkus
+In Quarkus, event handlers run on the `ExecutorService` with the `Events` qualifier (by default the virtual thread executor of Quarkus) on a fresh Vert.x duplicated context with a new, empty CDI request context.
+Nothing from the publishing request (request scoped beans, `SecurityIdentity`, Vert.x context locals) is visible to a handler, and the publishing request keeps its own request context while the event is handled.
+
 ## Data Source
 The library expects that the following table exists when using the `javax.sql.DataSource` with the [`Events`](https://jonasrutishauser.github.io/transactional-event/snapshot/transactional-event-api/apidocs/com/github/jonasrutishauser/transactional/event/api/Events.html) qualifier:
 
