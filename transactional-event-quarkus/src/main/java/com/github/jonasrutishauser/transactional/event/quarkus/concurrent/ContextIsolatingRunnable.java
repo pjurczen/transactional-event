@@ -1,5 +1,6 @@
 package com.github.jonasrutishauser.transactional.event.quarkus.concurrent;
 
+import io.quarkus.vertx.core.runtime.context.VertxContextSafetyToggle;
 import io.vertx.core.impl.ContextInternal;
 
 /**
@@ -26,6 +27,8 @@ final class ContextIsolatingRunnable implements Runnable {
             return;
         }
         ContextInternal fresh = current.duplicate();
+        // the fresh context is private to this task, so integrations validating the context safety may use it
+        VertxContextSafetyToggle.setContextSafe(fresh, true);
         ContextInternal previous = fresh.beginDispatch();
         try {
             delegate.run();

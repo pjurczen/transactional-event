@@ -14,6 +14,7 @@ import com.github.jonasrutishauser.transactional.event.api.EventPublisher;
 import com.github.jonasrutishauser.transactional.event.api.handler.EventHandler;
 
 import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.vertx.core.runtime.context.VertxContextSafetyToggle;
 import io.restassured.RestAssured;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Dependent;
@@ -109,6 +110,8 @@ class RequestContextIsolationIT {
 
         @EventHandler
         void handle(String event) {
+            VertxContextSafetyToggle.validateContextIfExists("processing context is marked unsafe",
+                    "processing context is not marked safe");
             rendezvous.handlerStarted(requestContextProbe.isMarked());
         }
 
